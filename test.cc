@@ -55,8 +55,17 @@ int test2()
 			<< "\tword : " << words.getCurWord() << endl;
 		words.next();
 	}
-	
-	words.leading_out();
+	string tmp = "编程学习";	
+	int id = words.search(tmp);
+	if(-1 == id)
+	{
+		cout << "no such word like \"" << tmp << "\"" << endl;
+	}else{
+		cout << "find ID : " << id
+			<< "\tword : " << tmp << endl;
+	}
+
+
 	return 0;
 }
 

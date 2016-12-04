@@ -27,6 +27,7 @@ class Dictionary
 		Dictionary();
 		void push(const string & word);
 		void push(vector<string> & words);
+		int search(const string & word);
 	private:
 		void AddWord(const string & word, int wordId);
 		void splitWord(const string & word, vector<string> & characters);//把词拆成字

@@ -98,6 +98,30 @@ void Dictionary::push(vector<string> & words)
 	}
 }
 
+int Dictionary::search(const string & word)
+{
+	vector<string> characters;
+	splitWord(word, characters);
+	
+	vector<string>::iterator it_char;
+	it_char = characters.begin();	
+	pDictElem root;
+	root = _dictionary;
+	for(; it_char != characters.end(); ++it_char)
+	{
+		WordIt it_word;
+		it_word = root->_words.find(*it_char);
+		
+		if(it_word == root->_words.end())
+		{
+			return -1;
+		}else{
+			root = it_word->second;
+		}
+	}
+	return root->_wordId;
+}
+
 //遍历用
 
 void Dictionary::resetPoint()
