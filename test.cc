@@ -13,13 +13,13 @@ using std::endl;
 using std::string;
 using std::vector;
 
-int main()
+int test1()
 {
 	ccx::Dictionary words;
-	string word1 = "阿里abc";	
-	string word2 = "阿里云";	
-	string word3 = "阿里巴巴";	
-	string word4 = "阿里大数据";	
+	string word1 = "编程入门";	
+	string word2 = "编程软件";	
+	string word3 = "编程学习";	
+	string word4 = "编程学习网站";	
 	
 	words.push(word1);	
 	words.push(word2);	
@@ -30,8 +30,42 @@ int main()
 	
 	while(!words.isEnd())
 	{
-		cout << "char : " << words.getCurChar() << endl;
-		cout << "word : " << words.getCurWord() << endl;
+		cout << "ID : " << words.getCurWordId() 
+			<< "\tchar : " << words.getCurChar() 
+			<< "\tword : " << words.getCurWord() << endl;
 		words.next();
 	}
+	
+	words.leading_out();
+	return 0;
+}
+
+
+int test2()
+{
+	ccx::Dictionary words;
+	words.leading_in();
+
+	words.resetPoint();
+	
+	while(!words.isEnd())
+	{
+		cout << "ID : " << words.getCurWordId() 
+			<< "\tchar : " << words.getCurChar() 
+			<< "\tword : " << words.getCurWord() << endl;
+		words.next();
+	}
+	
+	words.leading_out();
+	return 0;
+}
+
+int main()
+{
+	cout << "test1" << endl;
+	test1();
+	cout << endl;
+	cout << "test2" << endl;
+	test2();
+	cout << endl;
 }

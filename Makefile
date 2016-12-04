@@ -1,7 +1,7 @@
 INC_DIR:= ./include
 SRCS:=$(wildcard *.cc)
 OBJS:= $(patsubst %.cc, %.o, $(SRCS))
-LIBS:= 
+LIBS:= -ljson
 
 CXX:=g++
 
