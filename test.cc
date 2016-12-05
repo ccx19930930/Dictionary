@@ -26,7 +26,7 @@ int test1()
 	words.push(word3);	
 	words.push(word4);	
 
-	words.resetPoint();
+	words.resetIt();
 	
 	while(!words.isEnd())
 	{
@@ -49,7 +49,7 @@ int test2()
 
 	string word("编程训练");
 	words.push(word);
-	words.resetPoint();
+	words.resetIt();
 
 	while(!words.isEnd())
 	{
@@ -66,6 +66,23 @@ int test2()
 	}else{
 		cout << "find ID : " << id
 			<< "\tword : " << tmp << endl;
+	}
+
+	cout << endl;
+	cout << "associate \"编程\" : " << endl;
+
+	vector<string> data;	
+	string temp = "编程";
+	
+	if(words.associate(temp, data))
+	{
+		cout << "find!" << endl;
+		for(auto & elem : data)
+		{
+			cout << elem << endl;
+		}
+	}else{
+		cout << "can't find" << endl;
 	}
 
 

@@ -100,33 +100,75 @@ void Dictionary::push(vector<string> & words)
 
 int Dictionary::search(const string & word)
 {
-	vector<string> characters;
-	splitWord(word, characters);
+	pDictElem root = _dictionary;
+	vector<string> temp;
+	splitWord(word, temp);
 	
+	int ret = search(temp, root);
+	int size = temp.size();
+	if(ret != size)
+	{
+		return -1;
+	}
+	return root->_wordId;
+}
+
+int Dictionary::search(vector<string> & characters, pDictElem & root)
+{
 	vector<string>::iterator it_char;
 	it_char = characters.begin();	
-	pDictElem root;
 	root = _dictionary;
-	for(; it_char != characters.end(); ++it_char)
+	int i = 0;
+	for(; it_char != characters.end(); ++it_char, ++i)
 	{
 		WordIt it_word;
 		it_word = root->_words.find(*it_char);
 		
 		if(it_word == root->_words.end())
 		{
-			return -1;
+			break;
 		}else{
 			root = it_word->second;
 		}
 	}
-	return root->_wordId;
+	return i;
+}
+
+bool Dictionary::associate(const string & word, vector<string> & data)
+{
+	pDictElem root = _dictionary;
+	vector<string> temp;
+	splitWord(word, temp);
+	
+	int ret = search(temp, root);
+	int size = temp.size();
+	if(ret != size)
+	{
+		return false;
+	}
+	
+	list<WordIt> stackWord;
+	list<pDictElem> stackDict;
+	next(root, stackWord, stackDict);
+	while(root)
+	{
+		string temp = getCurWord(stackWord);
+		data.push_back(temp);	
+		next(root, stackWord, stackDict);
+	}
+	
+	if(!data.size())
+	{
+		return false;
+	}
+	return true;
 }
 
 //遍历用
 
-void Dictionary::resetPoint()
+void Dictionary::resetPoint(pDictElem pcur)
 {
-	_pcur = _dictionary;
+	_pcur = pcur;
 	if(_stackDict.size())
 	{
 		_stackDict.clear();
@@ -138,43 +180,53 @@ void Dictionary::resetPoint()
 	next();
 }
 
+void Dictionary::resetIt()
+{
+	resetPoint(_dictionary);
+}
+
 void Dictionary::next()
 {
-	while(_pcur)
+	next(_pcur, _stackWord, _stackDict);
+}
+
+void Dictionary::next(pDictElem & pcur, list<WordIt> & stackWord, list<pDictElem> & stackDict)
+{
+	while(pcur)
 	{
-		nextWord();
-		if(!_pcur || _pcur->_wordId)
+		nextWord(pcur, stackWord, stackDict);
+		if(!pcur || pcur->_wordId)
 		{
 			break;
 		}
 	}
 }
 
-void Dictionary::nextWord()
+void Dictionary::nextWord(pDictElem & pcur, list<WordIt> & stackWord, list<pDictElem> & stackDict)
 {
-	if(_pcur)
+	if(pcur)
 	{
-		if(_pcur->_words.size())
+		if(pcur->_words.size())
 		{
-			_stackDict.push_back(_pcur);
-			_stackWord.push_back(_pcur->_words.begin());
-			_pcur = _stackWord.back()->second;
+			stackDict.push_back(pcur);
+			stackWord.push_back(pcur->_words.begin());
+			pcur = stackWord.back()->second;
 		}else{
-			++(_stackWord.back());
+			++(stackWord.back());
 		}
-		while(_stackWord.back() == _stackDict.back()->_words.end())
+		while(stackWord.back() == stackDict.back()->_words.end())
 		{
-			_stackDict.pop_back();
-			_stackWord.pop_back();
-			if(!_stackDict.size())
+			stackDict.pop_back();
+			stackWord.pop_back();
+			if(!stackDict.size())
 			{
-				_pcur = NULL;
+				pcur = NULL;
 			}
-			++(_stackWord.back());
+			++(stackWord.back());
 		}
-		if(_pcur)
+		if(pcur)
 		{
-			_pcur = _stackWord.back()->second;
+			pcur = stackWord.back()->second;
 		}	
 	}
 }
@@ -191,11 +243,16 @@ int Dictionary::getCurWordId()
 
 string Dictionary::getCurWord()
 {
+	return getCurWord(_stackWord);
+}
+
+string Dictionary::getCurWord(list<WordIt> & stackWord)
+{
 	string temp;
 	list<WordIt>::iterator it_word;	
-	it_word = _stackWord.begin();	
+	it_word = stackWord.begin();	
 
-	for(; it_word != _stackWord.end(); ++it_word)
+	for(; it_word != stackWord.end(); ++it_word)
 	{
 		temp += (*it_word)->first;
 	}
@@ -240,7 +297,7 @@ void Dictionary::leading_out()
 	Json::Value root;
 	Json::FastWriter writer;
 
-	resetPoint();
+	resetIt();
 	
 	while(!isEnd())
 	{

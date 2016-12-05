@@ -28,28 +28,37 @@ class Dictionary
 		void push(const string & word);
 		void push(vector<string> & words);
 		int search(const string & word);
+		bool associate(const string & word, vector<string> & data);
 	private:
 		void AddWord(const string & word, int wordId);
 		void splitWord(const string & word, vector<string> & characters);//把词拆成字
+		int search(vector<string> & data, pDictElem & pcur);
 		pDictElem _dictionary;
 		DictionaryConf _conf;	
 
-	public://遍历用
-		void next();
+//遍历
+	public:
 		string getCurChar();
 		string getCurWord();
 		int getCurWordId();
-		void resetPoint();
 		bool isEnd();
+		void resetIt();
+		void next();
 	private:
-		void nextWord();
+		void resetPoint(pDictElem pcur);
+		void next(pDictElem & pcur, list<WordIt> & stackWord, list<pDictElem> & stackDict);
+		void nextWord(pDictElem & pcur, list<WordIt> & stackWord, list<pDictElem> & stackDict);
+		string getCurWord(list<WordIt> & stackWord);
+		
 		pDictElem _pcur;
 		WordIt _itcur;
-		//用list实现栈，遍历时方便
+		
+//用list实现栈，遍历时方便
 		list<WordIt> _stackWord;
 		list<pDictElem> _stackDict;
 
-	public://导入导出
+//导入导出
+	public:
 		void leading_in();
 		void leading_out();
 };
