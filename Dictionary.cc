@@ -229,6 +229,7 @@ void Dictionary::leading_in()//导入，失败没必要退出程序
 				string word = root[i]["Word"].asString();
 				int wordId = root[i]["WordId"].asInt();
 				AddWord(word, wordId);
+				++(_dictionary->_wordId);
 			}
 		}
 	}

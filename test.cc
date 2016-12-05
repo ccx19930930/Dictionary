@@ -46,8 +46,11 @@ int test2()
 	ccx::Dictionary words;
 	words.leading_in();
 
+
+	string word("编程训练");
+	words.push(word);
 	words.resetPoint();
-	
+
 	while(!words.isEnd())
 	{
 		cout << "ID : " << words.getCurWordId() 
