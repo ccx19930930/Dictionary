@@ -1,6 +1,6 @@
  ///
  /// @file    test.cc
- /// @author  chinxi(ccx19930930@gmail.com)
+ /// @author  chinxi(chenchengxi993@gmail.com)
  /// @date    2016-12-03 11:06:16
  ///
 
